@@ -1,10 +1,10 @@
-package humidifier;
+package humidifier.Mqtt;
 
+import humidifier.Config;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 /**
  * Handles everything concerning the MQTT Protocol
@@ -14,7 +14,7 @@ public class MqttHandler {
     private String topic;
     private String broker;
     private String clientId;
-    private MemoryPersistence persistence = new MemoryPersistence();
+    private MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence();
 
     /**
      * Init values
@@ -34,12 +34,16 @@ public class MqttHandler {
      */
     private void subscribe() {
         try {
-            MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
+            MqttClient client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             System.out.println("Connecting to broker: "+broker);
-            sampleClient.connect(connOpts);
+            client.connect(connOpts);
+            client.setCallback(new CallbackHandler());
             System.out.println("Connected");
+            client.subscribe(this.topic, 1);
+            System.out.println("subscribed to " + this.topic);
+
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());
             System.out.println("msg "+me.getMessage());
