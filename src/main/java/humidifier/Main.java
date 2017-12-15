@@ -13,6 +13,8 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception{
+        MqttHandler mqttHandler = new MqttHandler(new Config());
+
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
         primaryStage.setTitle("Air Humidifier");
         primaryStage.setScene(new Scene(root, 1920, 1080));

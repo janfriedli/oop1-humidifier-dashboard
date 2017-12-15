@@ -1,0 +1,3 @@
+mqttTopic=YourTopic
+mqttBroker=tcp://iot.eclipse.org:1883
+mqttClientId=SomeClientId
