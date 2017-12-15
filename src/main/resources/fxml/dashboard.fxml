@@ -6,40 +6,35 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="457.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
-          </items>
-        </Menu>
+        <Menu mnemonicParsing="false" text="Help" />
       </menus>
     </MenuBar>
-      <SplitPane dividerPositions="0.1833855799373041" prefHeight="372.0" prefWidth="640.0">
+      <SplitPane dividerPositions="0.1833855799373041" prefHeight="432.0" prefWidth="640.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <Label layoutX="14.0" layoutY="41.0" text="Humidity" />
-                  <Slider layoutX="8.0" layoutY="65.0" prefHeight="16.0" prefWidth="99.0" />
-                  <Label layoutX="15.0" layoutY="93.0" text="30%" />
+                  <Slider fx:id="humidityRuler" layoutX="8.0" layoutY="65.0" prefHeight="16.0" prefWidth="99.0" />
+                  <Label fx:id="humidityLabel" layoutX="15.0" layoutY="93.0" text="30%" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <LineChart>
+                  <LineChart fx:id="linechart" title="Humidity">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis label="Date" prefHeight="24.0" prefWidth="421.0" side="BOTTOM" fx:id="x" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis fx:id="y" label="Percent" side="LEFT" tickLabelGap="10.0" tickLength="5.0" tickMarkVisible="false" />
                     </yAxis>
                   </LineChart>
                </children>

@@ -34,7 +34,7 @@ public class MqttHandler {
     }
 
     /**
-     * Subscribes to the mqtt server
+     * Subscribes to the Mqtt server
      */
     private void subscribe() {
         try {
