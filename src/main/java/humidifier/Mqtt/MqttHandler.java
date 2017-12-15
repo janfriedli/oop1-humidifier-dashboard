@@ -5,12 +5,14 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+import java.util.UUID;
 
 /**
  * Handles everything concerning the MQTT Protocol
  */
 public class MqttHandler {
 
+    private String uniqueID = UUID.randomUUID().toString();
     private String topic;
     private String broker;
     private String clientId;
@@ -25,7 +27,9 @@ public class MqttHandler {
     ) {
         this.topic = config.getMqttTopic();
         this.broker = config.getMqttBroker();
-        this.clientId = config.getMqttClientId();
+        // make sure we never have the same client id - multiple instances running
+        this.clientId = config.getMqttClientId() + '-' +this.uniqueID;
+        System.out.println(this.clientId);
         this.subscribe();
     }
 
