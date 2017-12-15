@@ -1,0 +1,3 @@
+mqttTopic=/org/janf/humidifier
+mqttBroker=tcp://iot.eclipse.org:1883
+mqttClientId=lkasnou3in2
