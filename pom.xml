@@ -16,6 +16,12 @@
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.0.2</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.jfoenix/jfoenix -->
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -24,5 +30,5 @@
             <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
         </repository>
     </repositories>
-    
+
 </project>
