@@ -1,5 +1,8 @@
 package humidifier.Mqtt;
 
+import com.google.gson.Gson;
+import humidifier.DataManagement.Entry;
+import humidifier.DataManagement.HumidifierDataManager;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -8,6 +11,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * Processes the callbacks
  */
 public class CallbackHandler implements MqttCallback {
+
+    protected HumidifierDataManager dataManager;
+
+    public CallbackHandler() {
+        this.dataManager = HumidifierDataManager.getInstance();;
+    }
 
     /**
      * Handle losing connection
@@ -26,8 +35,10 @@ public class CallbackHandler implements MqttCallback {
      */
     @Override
     public void messageArrived(String string, MqttMessage mm) throws Exception {
-        System.out.println(string);
-        System.out.println(string +  ": " + new String(mm.getPayload()));
+        Gson g = new Gson();
+        Entry parsed = g.fromJson(new String(mm.getPayload()), Entry.class);
+        this.dataManager.insertValue(String.valueOf(System.currentTimeMillis()), (int) parsed.getHumidity());
+        System.out.println(parsed.getHumidity());
     }
 
     /**

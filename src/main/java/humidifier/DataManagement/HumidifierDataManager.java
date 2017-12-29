@@ -1,6 +1,12 @@
 package humidifier.DataManagement;
 
+import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Handle the data
@@ -21,6 +27,7 @@ public class HumidifierDataManager {
 
     /**
      * Gets the singleton instance
+     *
      * @return
      */
     public static HumidifierDataManager getInstance() {
@@ -29,25 +36,26 @@ public class HumidifierDataManager {
 
 
     /**
-     * Init data
+     * Insert a new mqtt message into the chart data
+     *
+     * @param unixTimeStamp a unix time stamp
+     * @param humidity      the humidity value between 0 - 1
      */
-    public HumidifierDataManager() {
-        for (int i = 0; i < 10; i++) {
-            this.series.getData().add(new XYChart.Data(String.valueOf(System.currentTimeMillis()), i));
-        }
+    public void insertValue(String unixTimeStamp, int humidity) {
+        Platform.runLater(
+                () -> {
+                    this.series.getData().add(new XYChart.Data(unixTimeStamp, humidity));
+                }
+        );
     }
 
     /**
-     * Insert a new mqtt message into the chart data
-     * @param unixTimeStamp a unix time stamp
-     * @param humidity the humidity value between 0 - 1
+     * Return the whole data set
+     *
+     * @return
      */
-    public void insertValue(String unixTimeStamp, int humidity) {
-        // todo correct mapping
-        this.series.getData().add(new XYChart.Data(unixTimeStamp, humidity));
-    }
-
     public XYChart.Series getSeries() {
         return this.series;
     }
+
 }

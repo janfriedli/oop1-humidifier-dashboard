@@ -1,45 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="457.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
-  <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="Help" />
-      </menus>
-    </MenuBar>
-      <SplitPane dividerPositions="0.1833855799373041" prefHeight="432.0" prefWidth="640.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <Label layoutX="14.0" layoutY="41.0" text="Humidity" />
-                  <Slider fx:id="humidityRuler" layoutX="8.0" layoutY="65.0" prefHeight="16.0" prefWidth="99.0" />
-                  <Label fx:id="humidityLabel" layoutX="15.0" layoutY="93.0" text="30%" />
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-               <children>
-                  <LineChart fx:id="linechart" title="Humidity">
-                    <xAxis>
-                      <CategoryAxis label="Date" prefHeight="24.0" prefWidth="421.0" side="BOTTOM" fx:id="x" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis fx:id="y" label="Percent" side="LEFT" tickLabelGap="10.0" tickLength="5.0" tickMarkVisible="false" />
-                    </yAxis>
-                  </LineChart>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-  </children>
-</VBox>
+
+<GridPane style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.0" minWidth="10.0" prefWidth="122.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="518.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints maxHeight="221.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="422.0" minHeight="10.0" prefHeight="398.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+    <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #FAFAFA #FAFAFA;" GridPane.rowIndex="1">
+         <children>
+            <JFXTextField fx:id="lower" layoutX="8.0" layoutY="31.0" prefHeight="26.0" prefWidth="99.0" promptText="Lower Bound" text="30" />
+            <JFXTextField layoutX="8.0" layoutY="93.0" prefHeight="26.0" prefWidth="99.0" promptText="Upper Bound" text="40" />
+            <Label layoutX="8.0" layoutY="14.0" text="Lower Bound" />
+            <Label layoutX="8.0" layoutY="76.0" text="Upper Bound" />
+            <JFXButton defaultButton="true" layoutX="8.0" layoutY="242.0" ripplerFill="#69a46b" text="Update" />
+            <JFXButton layoutX="8.0" layoutY="141.0" />
+         </children>
+      </AnchorPane>
+      <LineChart fx:id="linechart" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <xAxis>
+          <CategoryAxis label="Date" prefHeight="24.0" prefWidth="421.0" side="BOTTOM" fx:id="x" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="y" label="Percent" side="LEFT" tickLabelGap="10.0" tickLength="5.0" tickMarkVisible="false" />
+        </yAxis>
+      </LineChart>
+      <AnchorPane style="-fx-background-color: #ec407a#ec407a;">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Settings">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane style="-fx-background-color: #ec407a#ec407a;" GridPane.columnIndex="1">
+         <children>
+            <Label layoutX="177.0" layoutY="14.0" text="Relative Humidity">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>

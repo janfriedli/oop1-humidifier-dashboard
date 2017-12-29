@@ -18,7 +18,7 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/dashboard.fxml"));
         primaryStage.setTitle("Air Humidifier");
-        primaryStage.setScene(new Scene(root, 1920, 1080));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
 
