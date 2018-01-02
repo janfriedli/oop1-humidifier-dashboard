@@ -56,6 +56,14 @@ public class Config {
     }
 
     /**
+     * Get Limit Topic
+     * @return string
+     */
+    public String getMqttLimitTopic() {
+        return this.prop.getProperty("mqttLimitTopic");
+    }
+
+    /**
      * Get Broker name
      * @return string
      */

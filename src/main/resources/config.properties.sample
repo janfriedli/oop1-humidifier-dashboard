@@ -1,3 +1,4 @@
 mqttTopic=YourTopic
+mqttLimitTopic=YourTopic/limits
 mqttBroker=tcp://iot.eclipse.org:1883
 mqttClientId=SomeClientId

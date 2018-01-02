@@ -5,11 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+
 
 /**
  * Handle the data
@@ -80,7 +79,7 @@ public class HumidifierDataManager {
                 this.series.getData().add(new XYChart.Data(entry.getCreatedAt().toString(), entry.getHumidity()));
             }
         } catch (FileNotFoundException e) {
-            //ignore that it will be crated later
+            //ignore that it will be created later
         }
     }
 
@@ -95,5 +94,4 @@ public class HumidifierDataManager {
             e.printStackTrace();
         }
     }
-
 }

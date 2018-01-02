@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
+<GridPane style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.0" minWidth="10.0" prefWidth="122.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="518.0" />
@@ -29,8 +28,7 @@
             <JFXTextField layoutX="8.0" layoutY="93.0" prefHeight="26.0" prefWidth="99.0" promptText="Upper Bound" text="40" />
             <Label layoutX="8.0" layoutY="14.0" text="Lower Bound" />
             <Label layoutX="8.0" layoutY="76.0" text="Upper Bound" />
-            <JFXButton defaultButton="true" layoutX="8.0" layoutY="242.0" ripplerFill="#69a46b" text="Update" />
-            <JFXButton layoutX="8.0" layoutY="141.0" />
+            <JFXButton defaultButton="true" layoutX="8.0" layoutY="242.0" onAction="#updateButtonClicked" ripplerFill="#69a46b" text="Update" />
          </children>
       </AnchorPane>
       <LineChart fx:id="linechart" GridPane.columnIndex="1" GridPane.rowIndex="1">

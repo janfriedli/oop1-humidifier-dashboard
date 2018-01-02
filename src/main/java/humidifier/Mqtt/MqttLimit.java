@@ -6,15 +6,15 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
+
 import java.util.UUID;
 
 /**
  * Handles everything concerning the MQTT Protocol
  */
-public class MqttHandler {
+public class MqttLimit {
 
     private String uniqueID = UUID.randomUUID().toString();
-    private String topic;
     private String limitTopic;
     private String broker;
     private String clientId;
@@ -25,15 +25,13 @@ public class MqttHandler {
      * Init values
      * @param config
      */
-    public MqttHandler(
+    public MqttLimit(
             Config config
     ) {
-        this.topic = config.getMqttTopic();
         this.limitTopic = config.getMqttLimitTopic();
         this.broker = config.getMqttBroker();
         // make sure we never have the same client id - multiple instances running
         this.clientId = config.getMqttClientId() + '-' +this.uniqueID;
-        System.out.println(this.clientId);
         this.subscribe();
     }
 
@@ -45,12 +43,8 @@ public class MqttHandler {
             this.client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+broker);
             client.connect(connOpts);
-            client.setCallback(new CallbackHandler());
-            System.out.println("Connected");
-            client.subscribe(this.topic, 1);
-            System.out.println("subscribed to " + this.topic);
+            System.out.println("connected");
 
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());
@@ -61,4 +55,18 @@ public class MqttHandler {
             me.printStackTrace();
         }
     }
+
+    /**
+     * publish the upper and lower levels of humidity to the raspberry pi
+     */
+    public void publishHumidityLimits(String limits) {
+        MqttMessage message = new MqttMessage(limits.getBytes());
+        message.setQos(1);
+        try {
+            this.client.publish(this.limitTopic, message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
