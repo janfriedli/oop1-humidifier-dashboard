@@ -30,8 +30,7 @@ public class MqttLimit {
     ) {
         this.limitTopic = config.getMqttLimitTopic();
         this.broker = config.getMqttBroker();
-        // make sure we never have the same client id - multiple instances running
-        this.clientId = config.getMqttClientId() + '-' +this.uniqueID;
+        this.clientId = config.getMqttClientId() + '-' + this.uniqueID;
         this.subscribe();
     }
 
