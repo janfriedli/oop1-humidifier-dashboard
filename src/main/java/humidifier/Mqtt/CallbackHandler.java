@@ -15,7 +15,8 @@ public class CallbackHandler implements MqttCallback {
     protected HumidifierDataManager dataManager;
 
     public CallbackHandler() {
-        this.dataManager = HumidifierDataManager.getInstance();;
+        this.dataManager = HumidifierDataManager.getInstance();
+        this.dataManager.loadDataFromFile();
     }
 
     /**
@@ -24,7 +25,7 @@ public class CallbackHandler implements MqttCallback {
      */
     @Override
     public void connectionLost(Throwable thrwbl) {
-        System.out.println("connection lost");
+        System.out.println("connection lost " + thrwbl.getLocalizedMessage());
     }
 
     /**
@@ -37,7 +38,7 @@ public class CallbackHandler implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         Gson g = new Gson();
         Entry parsed = g.fromJson(new String(mm.getPayload()), Entry.class);
-        this.dataManager.insertValue(String.valueOf(System.currentTimeMillis()), (int) parsed.getHumidity());
+        this.dataManager.insertValue(parsed);
         System.out.println(parsed.getHumidity());
     }
 

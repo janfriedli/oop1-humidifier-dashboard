@@ -25,3 +25,4 @@ out/
 target
 src/main/resources/config.properties
 dashboard-*
+humidity.json
