@@ -1,5 +1,5 @@
 # Humidifier Dashboard
-A FX Application that presents the air humidity graphically and lets you control some parameters such as the
+A Java FX Application that presents the air humidity graphically and let's you control some parameters such as the
 range of the air humidity.
 
 ## Up and Running
@@ -7,6 +7,7 @@ range of the air humidity.
 1. Clone this repository
 2. Follow the Configuration section of this document
 3. Install all dependencies (Maven)
+4. Build and run
 
 
 ## Configuration

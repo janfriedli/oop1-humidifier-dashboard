@@ -3,17 +3,23 @@ package humidifier.DataManagement;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import humidifier.Mqtt.LimitListener;
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.util.List;
 
 /**
  * Handle the data
  */
 public class HumidifierDataManager {
+
+    /**
+     * List of listeners
+     */
+    private List<LimitListener> listeners = new ArrayList<LimitListener>();
 
     /**
      * chart data is a synchronized observable
@@ -24,6 +30,11 @@ public class HumidifierDataManager {
      * Placeholder list to simplify data handling
      */
     private ArrayList<Entry> entries = new ArrayList<>();
+
+    /**
+     *  the limit
+     */
+    private Limit limit;
 
     /**
      * Inner singleton class
@@ -92,6 +103,33 @@ public class HumidifierDataManager {
             gson.toJson(this.entries, writer);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * method for registering as listener
+     * @param toAdd
+     */
+    public void addLimitListener(LimitListener toAdd) {
+        listeners.add(toAdd);
+    }
+
+    /**
+     * set limit
+     * @return
+     */
+    public Limit getLimit() {
+        return limit;
+    }
+
+    /**
+     * get Limit
+     * @param limit
+     */
+    public void setLimit(Limit limit) {
+        this.limit = limit;
+        for (LimitListener listener : listeners) {
+            listener.updatedLimits(limit);
         }
     }
 }

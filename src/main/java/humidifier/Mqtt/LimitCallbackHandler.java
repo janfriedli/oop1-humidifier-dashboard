@@ -3,6 +3,7 @@ package humidifier.Mqtt;
 import com.google.gson.Gson;
 import humidifier.DataManagement.Entry;
 import humidifier.DataManagement.HumidifierDataManager;
+import humidifier.DataManagement.Limit;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -10,19 +11,18 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /**
  * Processes the callbacks
  */
-public class CallbackHandler implements MqttCallback {
+public class LimitCallbackHandler implements MqttCallback {
 
     /**
-     * the data manager
+     * The data manager
      */
     protected HumidifierDataManager dataManager;
 
     /**
-     * init object and load the data
+     * init object
      */
-    public CallbackHandler() {
+    public LimitCallbackHandler() {
         this.dataManager = HumidifierDataManager.getInstance();
-        this.dataManager.loadDataFromFile();
     }
 
     /**
@@ -43,9 +43,8 @@ public class CallbackHandler implements MqttCallback {
     @Override
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         Gson g = new Gson();
-        Entry parsed = g.fromJson(new String(mm.getPayload()), Entry.class);
-        this.dataManager.insertValue(parsed);
-        System.out.println(parsed.getHumidity());
+        Limit limit = g.fromJson(new String(mm.getPayload()), Limit.class);
+        this.dataManager.setLimit(limit);
     }
 
     /**
@@ -54,6 +53,6 @@ public class CallbackHandler implements MqttCallback {
      */
     @Override
     public void deliveryComplete(IMqttDeliveryToken imdt) {
-        // todo yaaay do smth here
+        // just chill
     }
 }

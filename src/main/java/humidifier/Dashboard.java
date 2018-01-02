@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import humidifier.DataManagement.HumidifierDataManager;
+import humidifier.DataManagement.Limit;
+import humidifier.Mqtt.LimitListener;
 import humidifier.Mqtt.MqttLimit;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,11 +14,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Dashboard implements Initializable {
+public class Dashboard implements Initializable, LimitListener {
 
     @FXML
     private LineChart<?, ?> linechart;
@@ -37,9 +38,15 @@ public class Dashboard implements Initializable {
 
     private MqttLimit limiter;
 
+    @FXML
+    private JFXButton updateButton;
+
     @Override
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
+        this.lowerBound.setDisable(true);
+        this.upperBound.setDisable(true);
+        this.updateButton.setDisable(true);
         this.dataManager = HumidifierDataManager.getInstance();
         this.linechart.getData().addAll(this.dataManager.getSeries());
         this.limiter = new MqttLimit(new Config());
@@ -63,6 +70,20 @@ public class Dashboard implements Initializable {
                 }
             }
         });
+
+        this.dataManager.addLimitListener(this);
+    }
+
+    /**
+     * Activate the text fields and set the limits
+     * @param limit
+     */
+    public void updatedLimits(Limit limit) {
+        this.upperBound.setText(String.valueOf(limit.getUpper()));
+        this.lowerBound.setText(String.valueOf(limit.getLower()));
+        this.lowerBound.setDisable(false);
+        this.upperBound.setDisable(false);
+        this.updateButton.setDisable(false);
     }
 
     /**

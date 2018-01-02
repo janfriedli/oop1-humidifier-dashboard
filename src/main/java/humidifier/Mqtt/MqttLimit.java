@@ -43,6 +43,9 @@ public class MqttLimit {
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             client.connect(connOpts);
+            client.setCallback(new LimitCallbackHandler());
+            client.subscribe(this.limitTopic, 1);
+            System.out.println("subscribed to " + this.limitTopic);
             System.out.println("connected");
 
         } catch(MqttException me) {
@@ -59,10 +62,8 @@ public class MqttLimit {
      * publish the upper and lower levels of humidity to the raspberry pi
      */
     public void publishHumidityLimits(String limits) {
-        MqttMessage message = new MqttMessage(limits.getBytes());
-        message.setQos(1);
         try {
-            this.client.publish(this.limitTopic, message);
+            this.client.publish(this.limitTopic, limits.getBytes(), 1, true);
         } catch (MqttException e) {
             e.printStackTrace();
         }
