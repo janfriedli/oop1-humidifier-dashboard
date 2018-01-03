@@ -7,12 +7,14 @@ import humidifier.Mqtt.LimitListener;
 import javafx.application.Platform;
 import javafx.scene.chart.XYChart;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Handle the data
+ * singleton
  */
 public class HumidifierDataManager {
 
@@ -35,6 +37,11 @@ public class HumidifierDataManager {
      *  the limit
      */
     private Limit limit;
+
+    /**
+     * the date format
+     */
+    private SimpleDateFormat ft = new SimpleDateFormat ("HH:mm:ss");
 
     /**
      * Inner singleton class
@@ -60,7 +67,7 @@ public class HumidifierDataManager {
         Platform.runLater(
                 () -> {
                     this.entries.add(entry);
-                    this.series.getData().add(new XYChart.Data(entry.getCreatedAt().toString(), entry.getHumidity()));
+                    this.series.getData().add(new XYChart.Data(ft.format(entry.getCreatedAt()), entry.getHumidity()));
                     this.saveDataToFile();
                 }
         );
@@ -72,9 +79,9 @@ public class HumidifierDataManager {
      * @return
      */
     public XYChart.Series getSeries() {
+        this.series.setName("Humidity Sensor");
         return this.series;
     }
-
 
     /**
      * Load data saved in a local json file
@@ -87,7 +94,7 @@ public class HumidifierDataManager {
             Entry[] data = gson.fromJson(reader, Entry[].class);
             Collections.addAll(this.entries, data);
             for (Entry entry : data) {
-                this.series.getData().add(new XYChart.Data(entry.getCreatedAt().toString(), entry.getHumidity()));
+                this.series.getData().add(new XYChart.Data(ft.format(entry.getCreatedAt()), entry.getHumidity()));
             }
         } catch (FileNotFoundException e) {
             //ignore that it will be created later
@@ -112,14 +119,6 @@ public class HumidifierDataManager {
      */
     public void addLimitListener(LimitListener toAdd) {
         listeners.add(toAdd);
-    }
-
-    /**
-     * set limit
-     * @return
-     */
-    public Limit getLimit() {
-        return limit;
     }
 
     /**

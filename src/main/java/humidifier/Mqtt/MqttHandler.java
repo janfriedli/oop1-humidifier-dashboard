@@ -1,6 +1,7 @@
 package humidifier.Mqtt;
 
 import humidifier.Config;
+import humidifier.Event.EventHandler;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -13,13 +14,40 @@ import java.util.UUID;
  */
 public class MqttHandler {
 
+    /**
+     * unique Id
+     */
     private String uniqueID = UUID.randomUUID().toString();
+
+    /**
+     * mqtt topic name
+     */
     private String topic;
-    private String limitTopic;
+
+    /**
+     * mqtt broker
+     */
     private String broker;
+
+    /**
+     * mqtt client id
+     */
     private String clientId;
+
+    /**
+     * Persistence
+     */
     private MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence();
+
+    /**
+     * the mqtt client
+     */
     private MqttClient client;
+
+    /**
+     * The event handler
+     */
+    protected EventHandler eventHandler = EventHandler.getInstance();
 
     /**
      * Init values
@@ -29,7 +57,6 @@ public class MqttHandler {
             Config config
     ) {
         this.topic = config.getMqttTopic();
-        this.limitTopic = config.getMqttLimitTopic();
         this.broker = config.getMqttBroker();
         // make sure we never have the same client id - multiple instances running
         this.clientId = config.getMqttClientId() + '-' +this.uniqueID;
@@ -49,16 +76,13 @@ public class MqttHandler {
             client.connect(connOpts);
             client.setCallback(new CallbackHandler());
             System.out.println("Connected");
+            this.eventHandler.humdityConnectionActive(true);
             client.subscribe(this.topic, 1);
             System.out.println("subscribed to " + this.topic);
 
         } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
-            me.printStackTrace();
+            this.eventHandler.humdityConnectionActive(false);
+            System.out.println("Connecting failed "+me.getCause());
         }
     }
 }

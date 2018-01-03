@@ -3,6 +3,7 @@ package humidifier.Mqtt;
 import com.google.gson.Gson;
 import humidifier.DataManagement.Entry;
 import humidifier.DataManagement.HumidifierDataManager;
+import humidifier.Event.EventHandler;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -18,11 +19,15 @@ public class CallbackHandler implements MqttCallback {
     protected HumidifierDataManager dataManager;
 
     /**
+     * The event handler
+     */
+    protected EventHandler eventHandler = EventHandler.getInstance();
+
+    /**
      * init object and load the data
      */
     public CallbackHandler() {
         this.dataManager = HumidifierDataManager.getInstance();
-        this.dataManager.loadDataFromFile();
     }
 
     /**
@@ -31,6 +36,7 @@ public class CallbackHandler implements MqttCallback {
      */
     @Override
     public void connectionLost(Throwable thrwbl) {
+        this.eventHandler.humdityConnectionActive(false);
         System.out.println("connection lost " + thrwbl.getLocalizedMessage());
     }
 
@@ -54,6 +60,6 @@ public class CallbackHandler implements MqttCallback {
      */
     @Override
     public void deliveryComplete(IMqttDeliveryToken imdt) {
-        // todo yaaay do smth here
+        // nice to know :)
     }
 }

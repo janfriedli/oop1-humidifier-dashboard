@@ -5,10 +5,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import humidifier.DataManagement.HumidifierDataManager;
 import humidifier.DataManagement.Limit;
+import humidifier.Event.EventHandler;
 import humidifier.Mqtt.LimitListener;
 import humidifier.Mqtt.MqttLimit;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -88,6 +90,17 @@ public class Dashboard implements Initializable, LimitListener {
     final Paint errorColor = Color.RED;
 
     /**
+     * The event handler
+     */
+    protected EventHandler eventHandler = EventHandler.getInstance();
+
+    /**
+     * the connection status label
+     */
+    @FXML
+    private Label statusDisplay;
+
+    /**
      * Initialize the gui
      * @param url
      * @param rb
@@ -137,6 +150,17 @@ public class Dashboard implements Initializable, LimitListener {
         });
 
         this.dataManager.addLimitListener(this);
+        this.eventHandler.humidityConnection().addListener(active -> {
+            Platform.runLater(
+                    () -> {
+                        if (active) {
+                            this.statusDisplay.setText("yes");
+                        } else {
+                            this.statusDisplay.setText("no");
+                        }
+                    }
+            );
+        });
     }
 
     /**
@@ -167,7 +191,7 @@ public class Dashboard implements Initializable, LimitListener {
 
                 this.limiter.publishHumidityLimits(limits.toString());
                 this.error.setTextFill(this.successColor);
-                this.error.setText("updated!");
+                this.error.setText("Updated!");
             } else {
                 this.error.setText("The lower bound can't be greater than the upper.");
             }
