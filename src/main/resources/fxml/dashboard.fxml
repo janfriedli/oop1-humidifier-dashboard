@@ -56,8 +56,8 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="statusLabel" layoutX="686.0" layoutY="16.0" text="Connected:" />
-            <Label fx:id="statusDisplay" layoutX="763.0" layoutY="16.0" prefHeight="16.0" prefWidth="43.0" />
+            <Label fx:id="statusLabel" layoutX="701.0" layoutY="16.0" text="Connected:" />
+            <Label fx:id="statusDisplay" layoutX="779.0" layoutY="17.0" prefHeight="16.0" prefWidth="43.0" />
          </children>
       </AnchorPane>
    </children>

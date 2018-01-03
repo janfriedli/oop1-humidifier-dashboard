@@ -71,6 +71,8 @@ public class MqttLimit {
             this.client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
+            connOpts.setConnectionTimeout(10);
+            connOpts.setKeepAliveInterval(10);
             client.connect(connOpts);
             client.setCallback(new LimitCallbackHandler());
             client.subscribe(this.limitTopic, 1);

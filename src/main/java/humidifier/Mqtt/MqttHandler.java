@@ -72,6 +72,8 @@ public class MqttHandler {
             this.client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
+            connOpts.setConnectionTimeout(10);
+            connOpts.setKeepAliveInterval(10);
             client.connect(connOpts);
             client.setCallback(new CallbackHandler());
             client.subscribe(this.topic, 1);
