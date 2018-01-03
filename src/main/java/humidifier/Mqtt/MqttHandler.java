@@ -59,7 +59,7 @@ public class MqttHandler {
         this.topic = config.getMqttTopic();
         this.broker = config.getMqttBroker();
         // make sure we never have the same client id - multiple instances running
-        this.clientId = config.getMqttClientId() + '-' +this.uniqueID;
+        this.clientId = config.getMqttClientId() + '-' + this.uniqueID;
         System.out.println(this.clientId);
         this.subscribe();
     }
@@ -72,13 +72,10 @@ public class MqttHandler {
             this.client = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+broker);
             client.connect(connOpts);
             client.setCallback(new CallbackHandler());
-            System.out.println("Connected");
-            this.eventHandler.humdityConnectionActive(true);
             client.subscribe(this.topic, 1);
-            System.out.println("subscribed to " + this.topic);
+            this.eventHandler.humdityConnectionActive(true);
 
         } catch(MqttException me) {
             this.eventHandler.humdityConnectionActive(false);

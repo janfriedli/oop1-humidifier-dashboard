@@ -1,6 +1,7 @@
 package humidifier.Mqtt;
 
 import humidifier.Config;
+import humidifier.Event.EventHandler;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -14,12 +15,40 @@ import java.util.UUID;
  */
 public class MqttLimit {
 
+    /**
+     * uuid
+     */
     private String uniqueID = UUID.randomUUID().toString();
+
+    /**
+     * mqtt limit topic
+     */
     private String limitTopic;
+
+    /**
+     * mqtt broker
+     */
     private String broker;
+
+    /**
+     * client id
+     */
     private String clientId;
+
+    /**
+     * persistence
+     */
     private MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence();
+
+    /**
+     * the mqtt client
+     */
     private MqttClient client;
+
+    /**
+     * The event handler
+     */
+    protected EventHandler eventHandler = EventHandler.getInstance();
 
     /**
      * Init values
@@ -45,11 +74,10 @@ public class MqttLimit {
             client.connect(connOpts);
             client.setCallback(new LimitCallbackHandler());
             client.subscribe(this.limitTopic, 1);
-            System.out.println("subscribed to " + this.limitTopic);
-            System.out.println("connected");
-
+            this.eventHandler.limitConnectionActive(true);
         } catch(MqttException me) {
-            System.out.println("Connecting failed "+me.getCause());
+            this.eventHandler.limitConnectionActive(false);
+            System.out.println("Connecting limit failed "+me.getCause());
         }
     }
 
@@ -60,7 +88,7 @@ public class MqttLimit {
         try {
             this.client.publish(this.limitTopic, limits.getBytes(), 1, true);
         } catch (MqttException e) {
-            e.printStackTrace();
+            this.eventHandler.limitConnectionActive(false);
         }
     }
 

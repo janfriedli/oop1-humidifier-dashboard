@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import humidifier.DataManagement.Entry;
 import humidifier.DataManagement.HumidifierDataManager;
 import humidifier.DataManagement.Limit;
+import humidifier.Event.EventHandler;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -19,6 +20,11 @@ public class LimitCallbackHandler implements MqttCallback {
     protected HumidifierDataManager dataManager;
 
     /**
+     * The event handler
+     */
+    protected EventHandler eventHandler = EventHandler.getInstance();
+
+    /**
      * init object
      */
     public LimitCallbackHandler() {
@@ -31,7 +37,8 @@ public class LimitCallbackHandler implements MqttCallback {
      */
     @Override
     public void connectionLost(Throwable thrwbl) {
-        System.out.println("connection lost " + thrwbl.getLocalizedMessage());
+        this.eventHandler.limitConnectionActive(false);
+        System.out.println("limit connection lost " + thrwbl.getLocalizedMessage());
     }
 
     /**

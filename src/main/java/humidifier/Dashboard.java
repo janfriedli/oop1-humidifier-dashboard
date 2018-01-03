@@ -108,12 +108,8 @@ public class Dashboard implements Initializable, LimitListener {
     @Override
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
-        this.lowerBound.setDisable(true);
-        this.upperBound.setDisable(true);
-        this.updateButton.setDisable(true);
         this.dataManager = HumidifierDataManager.getInstance();
         this.linechart.getData().addAll(this.dataManager.getSeries());
-        this.limiter = new MqttLimit(new Config());
         // make sure only digits are prohibited
         this.lowerBound.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -161,6 +157,16 @@ public class Dashboard implements Initializable, LimitListener {
                     }
             );
         });
+        this.eventHandler.limitConnection().addListener(active -> {
+            Platform.runLater(
+                    () -> {
+                        this.lowerBound.setDisable(!active);
+                        this.upperBound.setDisable(!active);
+                        this.updateButton.setDisable(!active);
+                    }
+            );
+        });
+        this.limiter = new MqttLimit(new Config());
     }
 
     /**
