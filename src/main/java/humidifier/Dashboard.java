@@ -7,6 +7,8 @@ import humidifier.DataManagement.HumidifierDataManager;
 import humidifier.DataManagement.Limit;
 import humidifier.Mqtt.LimitListener;
 import humidifier.Mqtt.MqttLimit;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -16,31 +18,80 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 
+/**
+ * Controller that handles the gui actions
+ */
 public class Dashboard implements Initializable, LimitListener {
 
+    /**
+     * the line chart
+     */
     @FXML
     private LineChart<?, ?> linechart;
 
+    /**
+     * the x axis
+     */
     @FXML
     private CategoryAxis x;
 
+    /**
+     * the y axis
+     */
     @FXML
     private NumberAxis y;
 
+    /**
+     * the lower bound text field
+     */
     @FXML
     private JFXTextField lowerBound;
 
+    /**
+     * the upper bound text field
+     */
     @FXML
     private JFXTextField upperBound;
 
+    @FXML
+    private Label error;
+
+    /**
+     * the data manager
+     */
     private HumidifierDataManager dataManager;
 
+    /**
+     * the limit
+     */
     private MqttLimit limiter;
 
+    /**
+     * the update button
+     */
     @FXML
     private JFXButton updateButton;
 
+    /**
+     * the success color
+     */
+    final Paint successColor = Color.GREEN;
+
+    /**
+     * the error color
+     */
+    final Paint errorColor = Color.RED;
+
+    /**
+     * Initialize the gui
+     * @param url
+     * @param rb
+     */
     @Override
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
@@ -58,6 +109,13 @@ public class Dashboard implements Initializable, LimitListener {
                 if (!newValue.matches("\\d*")) {
                     lowerBound.setText(newValue.replaceAll("[^\\d]", ""));
                 }
+
+                if (!lowerBound.getText().trim().isEmpty()) {
+                    int lower = Integer.parseInt(lowerBound.getText());
+                    if (lower >= 100) {
+                        lowerBound.setText("99");
+                    }
+                }
             }
         });
 
@@ -67,6 +125,13 @@ public class Dashboard implements Initializable, LimitListener {
                                 String newValue) {
                 if (!newValue.matches("\\d*")) {
                     upperBound.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+
+                if (!upperBound.getText().trim().isEmpty()) {
+                    int upper = Integer.parseInt(upperBound.getText());
+                    if (upper > 100) {
+                        upperBound.setText("100");
+                    }
                 }
             }
         });
@@ -90,10 +155,30 @@ public class Dashboard implements Initializable, LimitListener {
      * create a json object and publish it
      */
     public void updateButtonClicked() {
-        JsonObject limits = new JsonObject();
-        limits.addProperty("lower", this.lowerBound.getText());
-        limits.addProperty("upper", this.upperBound.getText());
+        this.error.setTextFill(this.errorColor);
+        if (!upperBound.getText().trim().isEmpty() && !lowerBound.getText().trim().isEmpty()) {
+            int upper = Integer.parseInt(upperBound.getText());
+            int lower = Integer.parseInt(lowerBound.getText());
 
-        this.limiter.publishHumidityLimits(limits.toString());
+            if (upper > lower) {
+                JsonObject limits = new JsonObject();
+                limits.addProperty("lower", this.lowerBound.getText());
+                limits.addProperty("upper", this.upperBound.getText());
+
+                this.limiter.publishHumidityLimits(limits.toString());
+                this.error.setTextFill(this.successColor);
+                this.error.setText("updated!");
+            } else {
+                this.error.setText("The lower bound can't be greater than the upper.");
+            }
+        } else {
+            this.error.setText("Both fields must have a value");
+        }
+
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(4000),
+                ae -> error.setText(""))
+        );
+        timeline.play();
     }
 }

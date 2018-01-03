@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
+<GridPane prefHeight="444.0" prefWidth="640.0" style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="humidifier.Dashboard">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.0" minWidth="10.0" prefWidth="122.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="518.0" />
@@ -28,12 +28,13 @@
             <JFXTextField fx:id="upperBound" layoutX="8.0" layoutY="93.0" prefHeight="26.0" prefWidth="99.0" promptText="Upper Bound" text="40" />
             <Label layoutX="8.0" layoutY="14.0" text="Lower Bound" />
             <Label layoutX="8.0" layoutY="76.0" text="Upper Bound" />
-            <JFXButton fx:id="updateButton" layoutX="8.0" layoutY="131.0" onAction="#updateButtonClicked" ripplerFill="#dd10a7" text="Update" />
+            <JFXButton fx:id="updateButton" layoutX="8.0" layoutY="135.0" onAction="#updateButtonClicked" ripplerFill="#ebd9e7" style="-fx-background-color: #ec407a #ec407a;" text="Update" />
+            <Label fx:id="error" alignment="TOP_LEFT" layoutX="8.0" layoutY="170.0" prefHeight="217.0" prefWidth="99.0" textFill="#d3132c" wrapText="true" />
          </children>
       </AnchorPane>
-      <LineChart fx:id="linechart" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <LineChart fx:id="linechart" prefHeight="452.0" prefWidth="518.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <xAxis>
-          <CategoryAxis label="Date" prefHeight="24.0" prefWidth="421.0" side="BOTTOM" fx:id="x" />
+          <CategoryAxis label="Date" prefHeight="93.0" prefWidth="445.0" side="BOTTOM" fx:id="x" />
         </xAxis>
         <yAxis>
           <NumberAxis fx:id="y" label="Percent" side="LEFT" tickLabelGap="10.0" tickLength="5.0" tickMarkVisible="false" />
@@ -48,9 +49,9 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane style="-fx-background-color: #ec407a#ec407a;" GridPane.columnIndex="1">
+      <AnchorPane style="-fx-background-color: #ec407a;" GridPane.columnIndex="1">
          <children>
-            <Label layoutX="177.0" layoutY="14.0" text="Relative Humidity">
+            <Label layoutX="217.0" layoutY="15.0" text="Humidity">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
