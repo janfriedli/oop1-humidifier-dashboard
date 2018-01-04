@@ -23,6 +23,6 @@ hs_err_pid*
 .idea/
 out/
 target
-main/resources/config.properties
+src/main/resources/config.properties
 dashboard-*
 humidity.json
